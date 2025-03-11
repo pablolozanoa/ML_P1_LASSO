@@ -2,6 +2,8 @@ import csv
 
 import numpy
 
+import sys
+sys.path.insert(0, '..')   
 from model.LassoHomotopy import LassoHomotopyModel
 
 def test_predict():
@@ -17,3 +19,6 @@ def test_predict():
     results = model.fit(X,y)
     preds = results.predict(X)
     assert preds == 0.5
+
+if __name__ == '__main__':
+    test_predict()
