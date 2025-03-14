@@ -32,9 +32,9 @@ Traditional solvers like *Coordinate Descent* or *Least Angle Regression (LARS)*
 ---
 
 ## 3. Optimality Conditions for LASSO
-Since the objective function is convex but non-differentiable (due to the ℓ₁ norm), the optimal solution is characterized by the **subdifferential** of $||\theta||_1$:
+Since the objective function is convex but non-differentiable (due to the ℓ₁ norm), the optimal solution is characterized by the **subdifferential** of $\left\|\theta \right\|_1$:
 ```math
-X^T (X \theta - y) + \mu_n v = 0, \quad v \in \partial ||\theta||_1
+X^T (X \theta - y) + \mu_n v = 0, \quad v \in \partial \left\|\theta \right\|_1
 ```
 Where \( v \) is a vector of subgradients.
 
@@ -51,7 +51,7 @@ If we want to change \( \mu_n \) to a new value \( \mu_{n+1} \), we efficiently 
 ### 4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
 We define the following problem:
 ```math
-\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} ||(X, t x_{n+1}) \theta - (y, t y_{n+1})||_2^2 + \mu ||\theta||_1
+\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} ||(X, t x_{n+1}) \theta - (y, t y_{n+1})||_2^2 + \mu \left\|\theta \right\|_1
 ```
 This parameter \( t \) allows us to continuously update the solution as the new observation is added.
 
