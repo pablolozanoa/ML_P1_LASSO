@@ -11,7 +11,7 @@ You may include Jupyter notebooks as visualizations or to help explain what your
 # LASSO Regression using the Homotopy Method
 
 ## 1. Introduction to LASSO
-LASSO (Least Absolute Shrinkage and Selection Operator) is a regression technique that introduces an ℓ₁ penalty to induce **sparsity** in the coefficient vector \(\theta\).
+LASSO (Least Absolute Shrinkage and Selection Operator) is a regression technique that introduces an ℓ₁ penalty to induce **sparsity** in the coefficient vector \theta.
 
 ### Objective
 To fit a linear model by minimizing the squared error with a penalty:
