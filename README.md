@@ -51,7 +51,7 @@ If we want to change $\mu_n$ to a new value $\mu_{n+1}$, we efficiently follow t
 ### 4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
 We define the following problem:
 ```math
-\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1})\right\|\tfrac{2}{2}
+\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1})\right\|\tfrac{2}{2} + \mu \left\|\theta \right\|_1
 
 \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1}) \right\_2^2 + \mu \left\|\theta \right\|_1
 ```
