@@ -43,31 +43,31 @@ By defining the **active set** (A), which consists of the variables with nonzero
 ---
 
 ## 4. Proposed Homotopy Algorithm (RecLasso)
-The algorithm has **two main steps** when a new data point \((y_{n+1}, x_{n+1})\) is introduced:
+The algorithm has **two main steps** when a new data point $(y_{n+1}, x_{n+1})$ is introduced:
 
-### 4.1 Step 1: Update the Regularization Parameter \( \mu_n \)
-If we want to change \( \mu_n \) to a new value \( \mu_{n+1} \), we efficiently follow the LASSO solution path.
+### 4.1 Step 1: Update the Regularization Parameter $\mu_n$
+If we want to change $\mu_n$ to a new value $\mu_{n+1}$, we efficiently follow the LASSO solution path.
 
 ### 4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
 We define the following problem:
 ```math
 \theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} ||(X, t x_{n+1}) \theta - (y, t y_{n+1})||_2^2 + \mu \left\|\theta \right\|_1
 ```
-This parameter \( t \) allows us to continuously update the solution as the new observation is added.
+This parameter $t$ allows us to continuously update the solution as the new observation is added.
 
 ### 4.3 Computing Transition Points
-- As \( t \) increases, the solution \( \theta(t) \) changes **smoothly** until a change in the active set occurs (a coefficient becomes zero, or a new coefficient becomes active).
+- As $t$ increases, the solution $\theta(t)$ changes **smoothly** until a change in the active set occurs (a coefficient becomes zero, or a new coefficient becomes active).
 - The next transition point is computed, where this change occurs, and the solution is updated.
 
 ---
 
 ## 5. Applications
 ### 5.1 Compressive Sensing
-- Used when the signal is **sparse** and we have fewer measurements than parameters (\( n < m \)).
+- Used when the signal is **sparse** and we have fewer measurements than parameters ($n < m$).
 - **RecLasso** is more efficient than *LARS* and *Coordinate Descent* for sequentially updating solutions.
 
-### 5.2 Regularization Parameter \( \lambda \) Selection
-- A **data-driven method** is proposed to dynamically adjust \( \lambda \) using the prediction error of the new observation.
+### 5.2 Regularization Parameter $\lambda$ Selection
+- A **data-driven method** is proposed to dynamically adjust $\lambda$ using the prediction error of the new observation.
 - The update is computed as:
 ```math
 \lambda_{n+1} = \lambda_n \times \exp\left(2n \eta x_{n+1,1}^T (X_1^T X_1)^{-1} v_1 (x_{n+1}^T \theta - y_{n+1})\right)
@@ -75,7 +75,7 @@ This parameter \( t \) allows us to continuously update the solution as the new 
 
 ### 6.3 Leave-One-Out Cross-Validation
 - The algorithm is adapted to **remove data points** instead of adding them.
-- Useful for selecting the optimal \( \lambda \) via **cross-validation**.
+- Useful for selecting the optimal $\lambda$ via **cross-validation**.
 
 ---
 
