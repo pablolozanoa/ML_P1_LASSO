@@ -50,7 +50,7 @@ This parameter $t$ allows us to continuously update the solution as the new obse
 - As $t$ increases, the solution $\theta(t)$ changes **smoothly** until a change in the active set occurs (a coefficient becomes zero, or a new coefficient becomes active).
 - The next transition point is computed, where this change occurs, and the solution is updated.
 
-Put your README here. Answer the following questions.
+# Answer the following questions.
 
 * What does the model you have implemented do and when should it be used?
 * How did you test your model to determine if it is working reasonably correctly?
