@@ -18,7 +18,7 @@ To fit a linear model by minimizing the squared error with a penalty:
 ```math
 \min_{\theta} \frac{1}{2} \sum_{i=1}^{n} (x_i^T \theta - y_i)^2 + \mu_n \left\|\theta \right\|_1
 ```
-Where \(\mu_n\) is the regularization parameter. The solution \(\theta\) tends to be **sparse**, meaning many coefficients are zero, which helps with feature selection.
+Where ```math \mu_n ``` is the regularization parameter. The solution θ tends to be **sparse**, meaning many coefficients are zero, which helps with feature selection.
 
 ---
 
