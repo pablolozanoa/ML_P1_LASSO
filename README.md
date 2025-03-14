@@ -16,7 +16,7 @@ LASSO (Least Absolute Shrinkage and Selection Operator) is a regression techniqu
 ### Objective
 To fit a linear model by minimizing the squared error with a penalty:
 ```math
-\min_{\theta} \frac{1}{2} \sum_{i=1}^{n} (x_i^T \theta - y_i)^2 + \mu_n ||\theta||_1
+\min_{\theta} \frac{1}{2} \sum_{i=1}^{n} (x_i^T \theta - y_i)^2 + \mu_n \left\| \right\|\theta\left\| \right\|_1
 ```
 Where \(\mu_n\) is the regularization parameter. The solution \(\theta\) tends to be **sparse**, meaning many coefficients are zero, which helps with feature selection.
 
