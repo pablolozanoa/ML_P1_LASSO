@@ -52,7 +52,7 @@ This parameter $t$ allows us to continuously update the solution as the new obse
 
 # Answer the following questions.
 
-* What does the model you have implemented do and when should it be used?
-* How did you test your model to determine if it is working reasonably correctly?
-* What parameters have you exposed to users of your implementation in order to tune performance? 
-* Are there specific inputs that your implementation has trouble with? Given more time, could you work around these or is it fundamental?
+## * What does the model you have implemented do and when should it be used?
+## * How did you test your model to determine if it is working reasonably correctly?
+## * What parameters have you exposed to users of your implementation in order to tune performance? 
+## * Are there specific inputs that your implementation has trouble with? Given more time, could you work around these or is it fundamental?
