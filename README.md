@@ -60,30 +60,6 @@ This parameter $t$ allows us to continuously update the solution as the new obse
 - As $t$ increases, the solution $\theta(t)$ changes **smoothly** until a change in the active set occurs (a coefficient becomes zero, or a new coefficient becomes active).
 - The next transition point is computed, where this change occurs, and the solution is updated.
 
----
-
-## 5. Applications
-### 5.1 Compressive Sensing
-- Used when the signal is **sparse** and we have fewer measurements than parameters ($n < m$).
-- **RecLasso** is more efficient than *LARS* and *Coordinate Descent* for sequentially updating solutions.
-
-### 5.2 Regularization Parameter $\lambda$ Selection
-- A **data-driven method** is proposed to dynamically adjust $\lambda$ using the prediction error of the new observation.
-- The update is computed as:
-```math
-\lambda_{n+1} = \lambda_n \times \exp\left(2n \eta x_{n+1,1}^T (X_1^T X_1)^{-1} v_1 (x_{n+1}^T \theta - y_{n+1})\right)
-```
-
-### 6.3 Leave-One-Out Cross-Validation
-- The algorithm is adapted to **remove data points** instead of adding them.
-- Useful for selecting the optimal $\lambda$ via **cross-validation**.
-
----
-
-## 7. Results
-- **Homotopy is faster and more stable than LARS** in sequential problems.
-- **Handles collinear data efficiently.**
-
 Put your README here. Answer the following questions.
 
 * What does the model you have implemented do and when should it be used?
