@@ -53,7 +53,6 @@ We define the following problem:
 ```math
 \theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1})\right\|\tfrac{2}{2} + \mu \left\|\theta \right\|_1
 
-\left\|(X, t x_{n+1}) \theta - (y, t y_{n+1}) \right\_2^2 + \mu \left\|\theta \right\|_1
 ```
 This parameter $t$ allows us to continuously update the solution as the new observation is added.
 
