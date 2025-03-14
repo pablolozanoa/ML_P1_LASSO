@@ -38,7 +38,7 @@ X^T (X \theta - y) + \mu_n v = 0, \quad v \in \partial \left\|\theta \right\|_1
 ```
 Where \( v \) is a vector of subgradients.
 
-By defining the **active set** (\( A \)), which consists of the variables with nonzero coefficients in \( \theta \), we can rewrite the solution in a closed form for the active coefficients.
+By defining the **active set** (A), which consists of the variables with nonzero coefficients in $\theta$, we can rewrite the solution in a closed form for the active coefficients.
 
 ---
 
