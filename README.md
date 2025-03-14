@@ -36,7 +36,7 @@ Since the objective function is convex but non-differentiable (due to the ℓ₁
 ```math
 X^T (X \theta - y) + \mu_n v = 0, \quad v \in \partial \left\|\theta \right\|_1
 ```
-Where \( v \) is a vector of subgradients.
+Where $v$ is a vector of subgradients.
 
 By defining the **active set** (A), which consists of the variables with nonzero coefficients in $\theta$, we can rewrite the solution in a closed form for the active coefficients.
 
@@ -51,7 +51,7 @@ If we want to change $\mu_n$ to a new value $\mu_{n+1}$, we efficiently follow t
 ### 4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
 We define the following problem:
 ```math
-\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} ||(X, t x_{n+1}) \theta - (y, t y_{n+1})||_2^2 + \mu \left\|\theta \right\|_1
+\theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1}) \right\_2^2 + \mu \left\|\theta \right\|_1
 ```
 This parameter $t$ allows us to continuously update the solution as the new observation is added.
 
