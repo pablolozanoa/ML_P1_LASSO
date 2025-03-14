@@ -59,7 +59,8 @@ def plot_coefficients(coefficients, title):
 @pytest.mark.parametrize("filename", ["small_test.csv", "collinear_data.csv"])
 def test_predict(filename):
     """ Test the LassoHomotopyModel using different datasets """
-    model = LassoHomotopyModel(lambda_init=0.1)
+    lambda_value = 0.5 if "small_test" in filename else 1.5
+    model = LassoHomotopyModel(lambda_init=lambda_value, eta=0.005)
     X, y = load_csv(filename)
     
     print(f"Testing with dataset: {filename}")
@@ -84,7 +85,8 @@ def test_collinear_data(correlation):
     X, y = generate_collinear_data(correlation=correlation)
     
     # Increase lambda_init to encourage sparsity
-    model = LassoHomotopyModel(lambda_init=2.0)
+    model = LassoHomotopyModel(lambda_init=1.5, eta=0.01, max_iter=300)
+    print(model.theta)
     results = model.fit(X, y)
     preds = results.predict(X)
     mse = mean_squared_error_manual(y, preds)
@@ -96,8 +98,58 @@ def test_collinear_data(correlation):
     print(f"Number of nonzero coefficients: {nonzero_count}")
     
     plot_coefficients(results.theta, f"LassoHomotopy Coefficients - Correlation {correlation}")
-    model.plot_lambda_history()
-    model.plot_theta_history()
     
     assert mse < 15, "MSE is too high for collinear data"
-    assert nonzero_count <= X.shape[1] / 2 + 1, "Model is not producing sparse coefficients as expected"
+    assert nonzero_count <= X.shape[1] / 2, "Model is not producing sparse coefficients as expected"
+
+def test_lambda_effect():
+    """Test to check the effect of lambda on sparsity"""
+    X, y = generate_collinear_data(n_samples=50, n_features=20, correlation=0.98)
+    
+    model_low_lambda = LassoHomotopyModel(lambda_init=0.01, max_iter=200)
+    model_high_lambda = LassoHomotopyModel(lambda_init=5.0, max_iter=200)
+    
+    results_low = model_low_lambda.fit(X, y)
+    results_high = model_high_lambda.fit(X, y)
+    
+    nonzero_low = np.count_nonzero(results_low.theta)
+    nonzero_high = np.count_nonzero(results_high.theta)
+    
+    print("\n===== Lambda Effect Test =====")
+    print(f"Non-zero coefficients with low lambda ({model_low_lambda.lambda_reg}): {nonzero_low}")
+    print(f"Non-zero coefficients with high lambda ({model_high_lambda.lambda_reg}): {nonzero_high}")
+    print("================================")
+    
+    assert nonzero_high < nonzero_low, "Higher lambda should lead to sparser solution"
+
+def test_zero_lambda():
+    """If lambda is zero, solution should be OLS"""
+    X, y = generate_collinear_data(n_samples=50, n_features=10)
+    
+    model = LassoHomotopyModel(lambda_init=0.0, max_iter=200)
+    results = model.fit(X, y)
+    
+    nonzero_coeffs = np.count_nonzero(results.theta)
+    
+    print("\n===== Zero Lambda Test =====")
+    print(f"Non-zero coefficients (expected full OLS solution): {nonzero_coeffs}")
+    print(f"Theta values: {results.theta}")
+    print("================================")
+    
+    assert nonzero_coeffs == X.shape[1], "Lambda=0 should not lead to sparsity"
+
+def test_highly_correlated_features():
+    """Test model performance on highly collinear data"""
+    X, y = generate_collinear_data(n_samples=100, n_features=10, correlation=0.99)
+    
+    model = LassoHomotopyModel(lambda_init=1.0, eta=0.01, max_iter=200)
+    results = model.fit(X, y)
+    
+    nonzero_count = np.count_nonzero(results.theta)
+    
+    print("\n===== Collinear Data Test =====")
+    print(f"Number of nonzero coefficients: {nonzero_count}")
+    print(f"Theta values: {results.theta}")
+    print("================================")
+    
+    assert nonzero_count <= X.shape[1] // 2, "Model should enforce sparsity on collinear data"
