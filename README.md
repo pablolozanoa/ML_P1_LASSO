@@ -166,34 +166,6 @@ class LassoHomotopyModel:
 - **Collinear data**: Handles cases where features are highly correlated.
 - **Online learning**: Efficient for scenarios where **data arrives sequentially** (e.g., real-time applications).
 
-### **Relevant Code (Extracted from test_LassoHomotopy.py)**
-To test if the model correctly enforces sparsity when features are collinear:
-
-```python
-def test_collinear_data(correlation):
-    """ Test LassoHomotopyModel with highly collinear data """
-    X, y = generate_collinear_data(correlation=correlation)
-
-    # Increase lambda_init to encourage sparsity
-    model = LassoHomotopyModel(lambda_init=1.5, eta=0.01, max_iter=300)
-    results = model.fit(X, y)
-    preds = results.predict(X)
-    mse = mean_squared_error_manual(y, preds)
-
-    print(f"Testing with collinear data (correlation={correlation})")
-    print(f"Mean Squared Error: {mse:.4f}")
-
-    nonzero_count = np.count_nonzero(results.theta)
-    print(f"Number of nonzero coefficients: {nonzero_count}")
-
-    assert mse < 15, "MSE is too high for collinear data"
-    assert nonzero_count <= X.shape[1] / 2, "Model is not producing sparse coefficients as expected"
-```
-- **Generates collinear data.**
-- **Fits the model and predicts the target values.**
-- **Ensures that the solution remains sparse.**
-- **Asserts that the MSE is within an acceptable range.**
-
 ---
 
 ## 2.2. How did you test your model to determine if it is working reasonably correctly?
