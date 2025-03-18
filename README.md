@@ -31,18 +31,7 @@ Project 1
 │── generate_regression_data.py     # Script to generate synthetic regression data
 ```
 
-|  **Folder/File**                 |  **Description** |
-|----------------------------------|-------------------|
-|  **README.md**                 | Project documentation |
-|  **requirements.txt**          | Required dependencies for the project |
-|  **LassoHomotopy/**            | Main project directory |
-| ├──  **model/**                | Contains the LASSO implementation |
-| │   ├──  **LassoHomotopy.py**   | Homotopy-based LASSO model |
-| ├──  **tests/**                | Contains test scripts and datasets |
-| │   ├──  **test_LassoHomotopy.py** | Unit tests for the LASSO model |
-| │   ├──  **collinear_data.csv**   | Dataset with highly collinear features |
-| │   ├──  **small_test.csv**       | Small dataset for validation |
-|  **generate_regression_data.py** | Script to generate synthetic regression data |
+The repository is structured to ensure a clear separation between the implementation, testing, and dataset generation. The `LassoHomotopy/` directory contains the core implementation of the LASSO model, with `LassoHomotopy.py` handling the homotopy-based regression algorithm. The `tests/` folder includes unit tests and datasets to validate the model’s accuracy, sparsity, and performance on collinear data, using `test_LassoHomotopy.py` along with the datasets `collinear_data.csv` and `small_test.csv`. Additionally, `generate_regression_data.py` provides a script to create synthetic regression datasets, allowing flexibility for testing different scenarios. This structure makes it easy to navigate, extend, and validate the model while maintaining clarity between its components.
 
 # Paper Review: An Homotopy Algorithm for the Lasso with Online Observations
 
