@@ -33,7 +33,7 @@ class LassoHomotopyModel:
             if len(active_list) > 0:
                 theta_active_prev = self.theta[active_list].copy()
                 
-                # Homotopy update
+                # Homotopy update using rank-one updates
                 theta_active = self._homotopy_update(X_active, y, theta_active_prev)
                 self.theta[active_list] = theta_active
                 
@@ -61,25 +61,12 @@ class LassoHomotopyModel:
         """
         Implements a more precise homotopy update.
         """
-        t = 0  # Homotopy parameter
-        t_step = 0.1  # Small step for homotopy update
+        try:
+            inv_X = np.linalg.inv(X_active.T @ X_active)
+        except np.linalg.LinAlgError:
+            inv_X = np.linalg.pinv(X_active.T @ X_active)  # Use pseudoinverse if not invertible
         
-        while t < 1:
-            # Apply homotopy formula
-            try:
-                inv_X = np.linalg.inv(X_active.T @ X_active)
-            except np.linalg.LinAlgError:
-                inv_X = np.linalg.pinv(X_active.T @ X_active)  # Use pseudoinverse if not invertible
-                
-            theta_active = inv_X @ (X_active.T @ y - self.lambda_reg * np.sign(theta_active_prev))
-            
-            # Detect transition points
-            if np.any(np.abs(theta_active) < self.tol):
-                break
-            
-            t += t_step
-        
-        return theta_active
+        return inv_X @ (X_active.T @ y - self.lambda_reg * np.sign(theta_active_prev))
 
     def plot_lambda_history(self):
         """ Plot the evolution of lambda_reg over iterations """
