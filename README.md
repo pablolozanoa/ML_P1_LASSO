@@ -1,4 +1,36 @@
-# PAPER SUMMARY: LASSO Regression using the Homotopy Method
+# PROJECT 1: LASSO regularized regression model using the Homotopy Method
+
+## Authors
+- Pablo Lozano Arias    (A20599454)  
+- Nicolás Rigau Sinca   (A20595377)
+
+---
+
+## 📌 Introduction
+This project implements **a LASSO regularized regression model** using the **Homotopy Method**, an efficient approach for solving sparse linear regression problems. The goal is to develop an implementation **from first principles**, avoiding built-in LASSO solvers like `scikit-learn`. Instead, the model leverages **NumPy** for numerical computations and is specifically designed to handle **highly collinear datasets**.
+
+The implementation is inspired by the paper **"An Homotopy Algorithm for the Lasso with Online Observations"**, which introduces an **online learning approach to LASSO**. While our current model solves the LASSO problem iteratively, it incorporates **homotopy-based updates** and **dynamic lambda adjustments**, aligning closely with the methodology described in the paper.
+
+---
+
+## 📂 Project Structure
+The repository is organized as follows:
+
+```plaintext
+Project 1
+│── README.md                   # Project documentation
+│── requirements.txt             # Required dependencies for the project
+│── LassoHomotopy/               # Main project directory
+│   ├── model/                   # Contains the LASSO implementation
+│   │   ├── LassoHomotopy.py      # Homotopy-based LASSO model
+│   ├── tests/                   # Contains test scripts and datasets
+│   │   ├── test_LassoHomotopy.py # Unit tests for the LASSO model
+│   │   ├── collinear_data.csv    # Dataset with highly collinear features
+│   │   ├── small_test.csv        # Small dataset for validation
+│── generate_regression_data.py   # Script to generate synthetic regression data
+```
+
+# Paper Review: An Homotopy Algorithm for the Lasso with Online Observations
 
 ## 1. Introduction to LASSO
 LASSO (Least Absolute Shrinkage and Selection Operator) is a regression technique that introduces an ℓ₁ penalty to induce **sparsity** in the coefficient vector θ.
