@@ -57,9 +57,9 @@ The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Meth
 
 ### **Functionality:**
 - Finds the optimal coefficient vector **θ** by minimizing the **LASSO objective function**:
-  ```math
+  $$
   \min_{\theta} \frac{1}{2} \sum_{i=1}^{n} (x_i^T \theta - y_i)^2 + \lambda ||\theta||_1
-  ```
+  $$
 - Uses the **Homotopy method** to update the solution iteratively without recomputing from scratch.
 - Automatically updates the **regularization parameter** $\lambda$ based on prediction error.
 
@@ -135,9 +135,9 @@ Yes, the model has certain limitations:
 
 4. **Dynamic λ update might be unstable**
    - The exponential update rule:
-     ```math
+     $$
      \lambda_{n+1} = \lambda_n \times \exp(-\eta \times \text{error})
-     ```
+     $$
      can lead to **rapid changes** in λ, making the solution oscillate.
 
 ### **Possible Workarounds:**
