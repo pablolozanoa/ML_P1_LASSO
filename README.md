@@ -31,6 +31,19 @@ Project 1
 │── generate_regression_data.py     # Script to generate synthetic regression data
 ```
 
+|  **Folder/File**                 |  **Description** |
+|----------------------------------|-------------------|
+|  **README.md**                 | Project documentation |
+|  **requirements.txt**          | Required dependencies for the project |
+|  **LassoHomotopy/**            | Main project directory |
+| ├──  **model/**                | Contains the LASSO implementation |
+| │   ├──  **LassoHomotopy.py**   | Homotopy-based LASSO model |
+| ├──  **tests/**                | Contains test scripts and datasets |
+| │   ├──  **test_LassoHomotopy.py** | Unit tests for the LASSO model |
+| │   ├──  **collinear_data.csv**   | Dataset with highly collinear features |
+| │   ├──  **small_test.csv**       | Small dataset for validation |
+|  **generate_regression_data.py** | Script to generate synthetic regression data |
+
 # Paper Review: An Homotopy Algorithm for the Lasso with Online Observations
 
 ## 1. Introduction to LASSO
