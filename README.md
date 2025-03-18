@@ -99,11 +99,100 @@ The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Meth
 - Uses the **Homotopy method** to update the solution iteratively without recomputing from scratch.
 - Automatically updates the **regularization parameter** $\lambda$ based on prediction error.
 
+### **Relevant Code (Extracted from `LassoHomotopy.py`)**
+The following code initializes the LASSO Homotopy Model and applies the **homotopy update** iteratively:
+
+```python
+class LassoHomotopyModel:
+    def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
+        self.lambda_reg = lambda_init  # Regularization parameter
+        self.eta = eta  # Learning rate for lambda update
+        self.max_iter = max_iter  # Maximum number of iterations
+        self.tol = tol  # Convergence tolerance
+        self.theta = None  # Model coefficients
+        self.active_set = set()  # Set of active features
+        self.lambda_history = []  # Store lambda updates
+        self.theta_history = []  # Store theta updates
+
+    def fit(self, X, y):
+        X = np.array(X, dtype=float)
+        y = np.array(y, dtype=float)
+
+        n, m = X.shape
+        self.theta = np.zeros(m)  # Initialize coefficients
+        self.active_set = set()
+
+        for _ in range(self.max_iter):
+            gradient = X.T @ (X @ self.theta - y)  # Compute gradient
+            idx = np.argmax(np.abs(gradient))  # Select the most relevant variable
+
+            if idx not in self.active_set:
+                self.active_set.add(idx)
+
+            active_list = list(self.active_set)
+            X_active = X[:, active_list]
+
+            if len(active_list) > 0:
+                theta_active_prev = self.theta[active_list].copy()
+
+                # Homotopy update
+                theta_active = self._homotopy_update(X_active, y, theta_active_prev)
+                self.theta[active_list] = theta_active
+
+                # More stable handling of coefficient removal
+                transition_points = np.where(np.abs(theta_active) < self.tol)[0]
+                for t in transition_points:
+                    if active_list[t] in self.active_set:
+                        self.active_set.remove(active_list[t])
+
+            # Store updates for visualization
+            self.lambda_history.append(self.lambda_reg)
+            self.theta_history.append(self.theta.copy())
+
+            # Update regularization parameter dynamically
+            prediction_error = np.mean((X @ self.theta - y) ** 2)
+            self.lambda_reg *= np.exp(-self.eta * prediction_error)
+
+            # Check for convergence
+            if np.linalg.norm(gradient, ord=np.inf) < self.tol:
+                break
+        
+        return LassoHomotopyResults(self.theta)
+```
+
 ### **When should it be used?**
 - **Feature selection**: Identifies the most important variables by enforcing sparsity in **θ**.
 - **High-dimensional data**: Works well when there are **more features (m) than observations (n)**.
 - **Collinear data**: Handles cases where features are highly correlated.
 - **Online learning**: Efficient for scenarios where **data arrives sequentially** (e.g., real-time applications).
+
+### **Relevant Code (Extracted from test_LassoHomotopy.py)**
+To test if the model correctly enforces sparsity when features are collinear:
+
+```python
+def test_collinear_data(correlation):
+    """ Test LassoHomotopyModel with highly collinear data """
+    X, y = generate_collinear_data(correlation=correlation)
+
+    # Increase lambda_init to encourage sparsity
+    model = LassoHomotopyModel(lambda_init=1.5, eta=0.01, max_iter=300)
+    results = model.fit(X, y)
+    preds = results.predict(X)
+    mse = mean_squared_error_manual(y, preds)
+
+    print(f"Testing with collinear data (correlation={correlation})")
+    print(f"Mean Squared Error: {mse:.4f}")
+
+    nonzero_count = np.count_nonzero(results.theta)
+    print(f"Number of nonzero coefficients: {nonzero_count}")
+
+    assert mse < 15, "MSE is too high for collinear data"
+    assert nonzero_count <= X.shape[1] / 2, "Model is not producing sparse coefficients as expected"
+```
+- **Generates collinear data.**
+- **Fits the model and predicts the target values.**
+- **Ensures that the solution remains sparse.**
+- **Asserts that the MSE is within an acceptable range.**
 
 ---
 
