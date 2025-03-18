@@ -33,9 +33,10 @@ Project 1
 
 The repository is structured to ensure a clear separation between the implementation, testing, and dataset generation. The `LassoHomotopy/` directory contains the core implementation of the LASSO model, with `LassoHomotopy.py` handling the homotopy-based regression algorithm. The `tests/` folder includes unit tests and datasets to validate the model’s accuracy, sparsity, and performance on collinear data, using `test_LassoHomotopy.py` along with the datasets `collinear_data.csv` and `small_test.csv`. Additionally, `generate_regression_data.py` provides a script to create synthetic regression datasets, allowing flexibility for testing different scenarios. This structure makes it easy to navigate, extend, and validate the model while maintaining clarity between its components.
 
-# Paper Review: An Homotopy Algorithm for the Lasso with Online Observations
+# 1. Paper Review: 
+An Homotopy Algorithm for the Lasso with Online Observations
 
-## 1. Introduction to LASSO
+## 1.1. Introduction to LASSO
 LASSO (Least Absolute Shrinkage and Selection Operator) is a regression technique that introduces an ℓ₁ penalty to induce **sparsity** in the coefficient vector θ.
 
 ### Objective
@@ -47,7 +48,7 @@ Where $\mu_n$ is the regularization parameter. The solution θ tends to be **spa
 
 ---
 
-## 2. Why Use the Homotopy Method?
+## 1.2. Why Use the Homotopy Method?
 Traditional solvers like *Coordinate Descent* or *Least Angle Regression (LARS)* can be computationally expensive.
 
 ### Advantages of the Homotopy Method
@@ -56,7 +57,7 @@ Traditional solvers like *Coordinate Descent* or *Least Angle Regression (LARS)*
 
 ---
 
-## 3. Optimality Conditions for LASSO
+## 1.3. Optimality Conditions for LASSO
 Since the objective function is convex but non-differentiable (due to the ℓ₁ norm), the optimal solution is characterized by the **subdifferential** of $\left\|\theta \right\|_1$:
 ```math
 X^T (X \theta - y) + \mu_n v = 0, \quad v \in \partial \left\|\theta \right\|_1
@@ -67,13 +68,13 @@ By defining the **active set** (A), which consists of the variables with nonzero
 
 ---
 
-## 4. Proposed Homotopy Algorithm (RecLasso)
+## 1.4. Proposed Homotopy Algorithm (RecLasso)
 The algorithm has **two main steps** when a new data point $(y_{n+1}, x_{n+1})$ is introduced:
 
-### 4.1 Step 1: Update the Regularization Parameter $\mu_n$
+### 1.4.1 Step 1: Update the Regularization Parameter $\mu_n$
 If we want to change $\mu_n$ to a new value $\mu_{n+1}$, we efficiently follow the LASSO solution path.
 
-### 4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
+### 1.4.2 Step 2: Vary the Parameter \( t \) from 0 to 1
 We define the following problem:
 ```math
 \theta(t, \mu) = \arg \min_{\theta} \frac{1}{2} \left\|(X, t x_{n+1}) \theta - (y, t y_{n+1})\right\|\tfrac{2}{2} + \mu \left\|\theta \right\|_1
@@ -81,13 +82,13 @@ We define the following problem:
 ```
 This parameter $t$ allows us to continuously update the solution as the new observation is added.
 
-### 4.3 Computing Transition Points
+### 1.4.3 Computing Transition Points
 - As $t$ increases, the solution $\theta(t)$ changes **smoothly** until a change in the active set occurs (a coefficient becomes zero, or a new coefficient becomes active).
 - The next transition point is computed, where this change occurs, and the solution is updated.
 
-# Answer the following questions.
+# 2. Answer the following questions.
 
-## 1. What does the model you have implemented do and when should it be used?
+## 2.1. What does the model you have implemented do and when should it be used?
 The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Method**, which efficiently computes a sparse solution for linear regression problems with ℓ₁ regularization.
 
 ### **Functionality:**
@@ -106,7 +107,7 @@ The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Meth
 
 ---
 
-## 2. How did you test your model to determine if it is working reasonably correctly?
+## 2.2. How did you test your model to determine if it is working reasonably correctly?
 
 The model is tested using multiple test cases defined in **test_LassoHomotopy.py**, ensuring its correctness and performance.
 
@@ -138,7 +139,7 @@ The model is tested using multiple test cases defined in **test_LassoHomotopy.py
 
 ---
 
-## 3. What parameters have you exposed to users of your implementation in order to tune performance?
+## 2.3. What parameters have you exposed to users of your implementation in order to tune performance?
 
 The model exposes several hyperparameters that allow users to fine-tune performance:
 
@@ -153,7 +154,7 @@ These parameters allow the user to **control sparsity, convergence speed, and so
 
 ---
 
-## 4. Are there specific inputs that your implementation has trouble with? Given more time, could you work around these or is it fundamental?
+## 2.4. Are there specific inputs that your implementation has trouble with? Given more time, could you work around these or is it fundamental?
 
 Yes, the model has certain limitations:
 
