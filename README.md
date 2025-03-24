@@ -122,6 +122,7 @@ def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
 - Number of iterations and tolerance for stopping.
 - Containers to track model coefficients and parameter history.
 
+
 ⚙️ Fitting the Model (Core of Homotopy Method)
 
 ```python
@@ -139,6 +140,7 @@ def fit(self, X, y):
 
 - Prepares the data and initializes parameters for optimization.
 - Sets $\theta$ to a zero vector, indicating that no features are active at the start.
+
 
 🔁 Iterative Update and Feature Selection
 
@@ -161,6 +163,7 @@ At each iteration:
 - Adds that feature to the active set if it's not already present.
 - Extracts the subset of X corresponding to active features.
 
+
 🔁 Homotopy Update of Coefficients
 
 ```python
@@ -175,6 +178,7 @@ if len(active_list) > 0:
 - Applies the homotopy formula to update the coefficients of the selected (active) features.
 - Uses the previous coefficients as a warm start.
 
+
 ❌ Removing Inactive Coefficients
 
 ```python
@@ -187,6 +191,7 @@ for t in transition_points:
 📝 Explanation:
 
 - If any updated coefficient becomes smaller than the tolerance, it's removed from the active set, enforcing sparsity.
+
 
 📉 Adaptive λ Update & History Tracking
 
@@ -203,6 +208,7 @@ self.lambda_reg *= np.exp(-self.eta * prediction_error)
 - Saves λ and θ values for each iteration (useful for plotting).
 - Updates λ using an exponential decay based on prediction error (dynamic regularization).
 
+
 🛑 Convergence Check
 
 ```python
@@ -213,6 +219,7 @@ if np.linalg.norm(gradient, ord=np.inf) < self.tol:
 📝 Explanation:
 
 - Stops the iteration when the largest gradient component is below the threshold (model has converged).
+
 
 🧮 Homotopy Update Function
 
@@ -231,6 +238,7 @@ def _homotopy_update(self, X_active, y, theta_active_prev):
 - Computes a closed-form update for θ using matrix inversion.
 - If the matrix is not invertible, uses the pseudo-inverse for stability.
 
+
 📊 Visualization Tools (Optional)
 
 ```python
@@ -241,6 +249,7 @@ def plot_theta_history(self): ...
 📝 Explanation:
 - These methods help visualize how λ and θ evolve over time.
 - Not core to the algorithm but helpful in analysis.
+
 
 🎯 Prediction Function
 
