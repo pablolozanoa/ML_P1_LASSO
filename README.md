@@ -115,7 +115,7 @@ def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
     self.theta_history = []  # Store theta updates
 ```
 
-📝Explanation: Sets up the initial parameters for the model. It includes:
+Explanation: Sets up the initial parameters for the model. It includes:
 
 - Initial regularization value (λ).
 - Learning rate for dynamically adjusting λ.
@@ -136,7 +136,7 @@ def fit(self, X, y):
 
 ```
 
-📝 Explanation:
+Explanation:
 
 - Prepares the data and initializes parameters for optimization.
 - Sets $\theta$ to a zero vector, indicating that no features are active at the start.
@@ -156,7 +156,7 @@ for _ in range(self.max_iter):
     X_active = X[:, active_list]
 ```
 
-📝 Explanation: 
+Explanation: 
 
 At each iteration:
 - Calculates the gradient to find the most impactful feature.
@@ -173,7 +173,7 @@ if len(active_list) > 0:
     self.theta[active_list] = theta_active
 ```
 
-📝 Explanation:
+Explanation:
 
 - Applies the homotopy formula to update the coefficients of the selected (active) features.
 - Uses the previous coefficients as a warm start.
@@ -188,7 +188,7 @@ for t in transition_points:
         self.active_set.remove(active_list[t])
 ```
 
-📝 Explanation:
+Explanation:
 
 - If any updated coefficient becomes smaller than the tolerance, it's removed from the active set, enforcing sparsity.
 
@@ -203,7 +203,7 @@ prediction_error = np.mean((X @ self.theta - y) ** 2)
 self.lambda_reg *= np.exp(-self.eta * prediction_error)
 ```
 
-📝 Explanation:
+Explanation:
 
 - Saves λ and θ values for each iteration (useful for plotting).
 - Updates λ using an exponential decay based on prediction error (dynamic regularization).
@@ -216,7 +216,7 @@ if np.linalg.norm(gradient, ord=np.inf) < self.tol:
     break
 ```
 
-📝 Explanation:
+Explanation:
 
 - Stops the iteration when the largest gradient component is below the threshold (model has converged).
 
@@ -233,7 +233,7 @@ def _homotopy_update(self, X_active, y, theta_active_prev):
     return inv_X @ (X_active.T @ y - self.lambda_reg * np.sign(theta_active_prev))
 ```
 
-📝 Explanation:
+Explanation:
 
 - Computes a closed-form update for θ using matrix inversion.
 - If the matrix is not invertible, uses the pseudo-inverse for stability.
@@ -246,7 +246,7 @@ def plot_lambda_history(self): ...
 def plot_theta_history(self): ...
 ```
 
-📝 Explanation:
+Explanation:
 - These methods help visualize how λ and θ evolve over time.
 - Not core to the algorithm but helpful in analysis.
 
@@ -259,7 +259,7 @@ def predict(self, X):
     return X @ self.theta
 ```
 
-📝 Explanation:
+Explanation:
 
 - Applies the learned θ to new data for making predictions.
 
