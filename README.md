@@ -100,65 +100,159 @@ The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Meth
 - Automatically updates the **regularization parameter** $\lambda$ based on prediction error.
 
 ### **Relevant Code (Extracted from `LassoHomotopy.py`)**
-The following code initializes the LASSO Homotopy Model and applies the **homotopy update** iteratively:
+
+🧩Initialization of the Model
 
 ```python
-class LassoHomotopyModel:
-    def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
-        self.lambda_reg = lambda_init  # Regularization parameter
-        self.eta = eta  # Learning rate for lambda update
-        self.max_iter = max_iter  # Maximum number of iterations
-        self.tol = tol  # Convergence tolerance
-        self.theta = None  # Model coefficients
-        self.active_set = set()  # Set of active features
-        self.lambda_history = []  # Store lambda updates
-        self.theta_history = []  # Store theta updates
-
-    def fit(self, X, y):
-        X = np.array(X, dtype=float)
-        y = np.array(y, dtype=float)
-
-        n, m = X.shape
-        self.theta = np.zeros(m)  # Initialize coefficients
-        self.active_set = set()
-
-        for _ in range(self.max_iter):
-            gradient = X.T @ (X @ self.theta - y)  # Compute gradient
-            idx = np.argmax(np.abs(gradient))  # Select the most relevant variable
-
-            if idx not in self.active_set:
-                self.active_set.add(idx)
-
-            active_list = list(self.active_set)
-            X_active = X[:, active_list]
-
-            if len(active_list) > 0:
-                theta_active_prev = self.theta[active_list].copy()
-
-                # Homotopy update
-                theta_active = self._homotopy_update(X_active, y, theta_active_prev)
-                self.theta[active_list] = theta_active
-
-                # More stable handling of coefficient removal
-                transition_points = np.where(np.abs(theta_active) < self.tol)[0]
-                for t in transition_points:
-                    if active_list[t] in self.active_set:
-                        self.active_set.remove(active_list[t])
-
-            # Store updates for visualization
-            self.lambda_history.append(self.lambda_reg)
-            self.theta_history.append(self.theta.copy())
-
-            # Update regularization parameter dynamically
-            prediction_error = np.mean((X @ self.theta - y) ** 2)
-            self.lambda_reg *= np.exp(-self.eta * prediction_error)
-
-            # Check for convergence
-            if np.linalg.norm(gradient, ord=np.inf) < self.tol:
-                break
-        
-        return LassoHomotopyResults(self.theta)
+def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
+    self.lambda_reg = lambda_init  # Regularization parameter
+    self.eta = eta  # Learning rate for lambda update
+    self.max_iter = max_iter  # Maximum number of iterations
+    self.tol = tol  # Convergence tolerance
+    self.theta = None  # Model coefficients
+    self.active_set = set()  # Set of active features
+    self.lambda_history = []  # Store lambda updates
+    self.theta_history = []  # Store theta updates
 ```
+
+📝Explanation: Sets up the initial parameters for the model. It includes:
+
+- Initial regularization value (λ).
+- Learning rate for dynamically adjusting λ.
+- Number of iterations and tolerance for stopping.
+- Containers to track model coefficients and parameter history.
+
+⚙️ Fitting the Model (Core of Homotopy Method)
+
+```python
+def fit(self, X, y):
+    X = np.array(X, dtype=float)
+    y = np.array(y, dtype=float)
+
+    n, m = X.shape
+    self.theta = np.zeros(m)
+    self.active_set = set()
+
+```
+
+📝 Explanation:
+
+- Prepares the data and initializes parameters for optimization.
+- Sets $\theta$ to a zero vector, indicating that no features are active at the start.
+
+🔁 Iterative Update and Feature Selection
+
+```python
+for _ in range(self.max_iter):
+    gradient = X.T @ (X @ self.theta - y)
+    idx = np.argmax(np.abs(gradient))
+
+    if idx not in self.active_set:
+        self.active_set.add(idx)
+
+    active_list = list(self.active_set)
+    X_active = X[:, active_list]
+```
+
+📝 Explanation: 
+
+At each iteration:
+- Calculates the gradient to find the most impactful feature.
+- Adds that feature to the active set if it's not already present.
+- Extracts the subset of X corresponding to active features.
+
+🔁 Homotopy Update of Coefficients
+
+```python
+if len(active_list) > 0:
+    theta_active_prev = self.theta[active_list].copy()
+    theta_active = self._homotopy_update(X_active, y, theta_active_prev)
+    self.theta[active_list] = theta_active
+```
+
+📝 Explanation:
+
+- Applies the homotopy formula to update the coefficients of the selected (active) features.
+- Uses the previous coefficients as a warm start.
+
+❌ Removing Inactive Coefficients
+
+```python
+transition_points = np.where(np.abs(theta_active) < self.tol)[0]
+for t in transition_points:
+    if active_list[t] in self.active_set:
+        self.active_set.remove(active_list[t])
+```
+
+📝 Explanation:
+
+- If any updated coefficient becomes smaller than the tolerance, it's removed from the active set, enforcing sparsity.
+
+📉 Adaptive λ Update & History Tracking
+
+```python
+self.lambda_history.append(self.lambda_reg)
+self.theta_history.append(self.theta.copy())
+
+prediction_error = np.mean((X @ self.theta - y) ** 2)
+self.lambda_reg *= np.exp(-self.eta * prediction_error)
+```
+
+📝 Explanation:
+
+- Saves λ and θ values for each iteration (useful for plotting).
+- Updates λ using an exponential decay based on prediction error (dynamic regularization).
+
+🛑 Convergence Check
+
+```python
+if np.linalg.norm(gradient, ord=np.inf) < self.tol:
+    break
+```
+
+📝 Explanation:
+
+- Stops the iteration when the largest gradient component is below the threshold (model has converged).
+
+🧮 Homotopy Update Function
+
+```python
+def _homotopy_update(self, X_active, y, theta_active_prev):
+    try:
+        inv_X = np.linalg.inv(X_active.T @ X_active)
+    except np.linalg.LinAlgError:
+        inv_X = np.linalg.pinv(X_active.T @ X_active)
+
+    return inv_X @ (X_active.T @ y - self.lambda_reg * np.sign(theta_active_prev))
+```
+
+📝 Explanation:
+
+- Computes a closed-form update for θ using matrix inversion.
+- If the matrix is not invertible, uses the pseudo-inverse for stability.
+
+📊 Visualization Tools (Optional)
+
+```python
+def plot_lambda_history(self): ...
+def plot_theta_history(self): ...
+```
+
+📝 Explanation:
+- These methods help visualize how λ and θ evolve over time.
+- Not core to the algorithm but helpful in analysis.
+
+🎯 Prediction Function
+
+```python
+def predict(self, X):
+    X = np.array(X, dtype=float)
+    return X @ self.theta
+```
+
+📝 Explanation:
+
+- Applies the learned θ to new data for making predictions.
 
 ### **When should it be used?**
 - **Feature selection**: Identifies the most important variables by enforcing sparsity in **θ**.
