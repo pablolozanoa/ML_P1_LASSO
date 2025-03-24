@@ -101,7 +101,7 @@ The **LassoHomotopyModel** implements **LASSO regression using the Homotopy Meth
 
 ### **Relevant Code (Extracted from `LassoHomotopy.py`)**
 
-🧩Initialization of the Model
+#### **Initialization of the Model**
 
 ```python
 def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
@@ -123,7 +123,7 @@ def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
 - Containers to track model coefficients and parameter history.
 
 
-⚙️ Fitting the Model (Core of Homotopy Method)
+#### **Fitting the Model (Core of Homotopy Method)**
 
 ```python
 def fit(self, X, y):
@@ -142,7 +142,7 @@ def fit(self, X, y):
 - Sets $\theta$ to a zero vector, indicating that no features are active at the start.
 
 
-🔁 Iterative Update and Feature Selection
+#### **Iterative Update and Feature Selection**
 
 ```python
 for _ in range(self.max_iter):
@@ -164,7 +164,7 @@ At each iteration:
 - Extracts the subset of X corresponding to active features.
 
 
-🔁 Homotopy Update of Coefficients
+#### **Homotopy Update of Coefficients**
 
 ```python
 if len(active_list) > 0:
@@ -179,7 +179,7 @@ if len(active_list) > 0:
 - Uses the previous coefficients as a warm start.
 
 
-❌ Removing Inactive Coefficients
+#### **Removing Inactive Coefficients**
 
 ```python
 transition_points = np.where(np.abs(theta_active) < self.tol)[0]
@@ -193,7 +193,7 @@ for t in transition_points:
 - If any updated coefficient becomes smaller than the tolerance, it's removed from the active set, enforcing sparsity.
 
 
-📉 Adaptive λ Update & History Tracking
+#### **Adaptive λ Update & History Tracking**
 
 ```python
 self.lambda_history.append(self.lambda_reg)
@@ -209,7 +209,7 @@ self.lambda_reg *= np.exp(-self.eta * prediction_error)
 - Updates λ using an exponential decay based on prediction error (dynamic regularization).
 
 
-🛑 Convergence Check
+#### **Convergence Check**
 
 ```python
 if np.linalg.norm(gradient, ord=np.inf) < self.tol:
@@ -221,7 +221,7 @@ if np.linalg.norm(gradient, ord=np.inf) < self.tol:
 - Stops the iteration when the largest gradient component is below the threshold (model has converged).
 
 
-🧮 Homotopy Update Function
+#### **Homotopy Update Function**
 
 ```python
 def _homotopy_update(self, X_active, y, theta_active_prev):
@@ -239,7 +239,7 @@ def _homotopy_update(self, X_active, y, theta_active_prev):
 - If the matrix is not invertible, uses the pseudo-inverse for stability.
 
 
-📊 Visualization Tools (Optional)
+#### **Visualization Tools (Optional)**
 
 ```python
 def plot_lambda_history(self): ...
@@ -251,7 +251,7 @@ def plot_theta_history(self): ...
 - Not core to the algorithm but helpful in analysis.
 
 
-🎯 Prediction Function
+#### **Prediction Function**
 
 ```python
 def predict(self, X):
