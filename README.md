@@ -347,6 +347,32 @@ All required packages are listed in the requirements.txt file:
 pip install -r requirements.txt
 ```
 
+## 3.2. Running the LASSO Homotopy Model
+
+The model can be runed on a dataset using the `test_LassoHomotopy.py` script inside the `tests/` directory. This script contains multiple test functions that:
+- Train the model on synthetic or CSV datasets.
+- Display results and plots.
+- Evaluate performance with metrics like Mean Squared Error (MSE).
+- Test sparsity behavior under different configurations.
+
+#### Step 1: Navigate to the tests directory
+```bash
+cd LassoHomotopy/tests
+```
+#### Step 2: Run all tests using PyTest
+To automatically run the tests we use pytest:
+```bash
+pytest
+```
+If you want to see the prints of the test run the following
+```bash
+pytest -s
+```
+
+Each test will produce visualizations:
+- Bar plots of learned coefficients.
+- Line plots showing how λ and θ evolve over time.
+
 ---
 
 ## **Final Thoughts**
