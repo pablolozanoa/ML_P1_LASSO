@@ -331,6 +331,24 @@ Yes, the model has certain limitations:
 
 ---
 
+# 3. Code Execution.
+
+## 3.1. Set up the Environment
+
+#### Step 1: Create and activate the virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+#### Step 2: Install project dependencies
+All required packages are listed in the requirements.txt file:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
 ## **Final Thoughts**
 **LassoHomotopyModel** is well-implemented and efficiently computes sparse solutions for LASSO regression. It has been rigorously tested with synthetic and real-world data, ensuring its reliability. However, handling **ill-conditioned data** and tuning **λ updates** could remain areas for improvement.
 
