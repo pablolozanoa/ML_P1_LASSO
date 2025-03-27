@@ -19,16 +19,17 @@ The repository is organized as follows:
 
 ```plaintext
 Project 1
-│── README.md                       # Project documentation
-│── requirements.txt                # Required dependencies for the project
-│── LassoHomotopy/                  # Main project directory
-│   ├── model/                      # Contains the LASSO implementation
-│   │   ├── LassoHomotopy.py        # Homotopy-based LASSO model
-│   ├── tests/                      # Contains test scripts and datasets
-│   │   ├── test_LassoHomotopy.py   # Unit tests for the LASSO model
-│   │   ├── collinear_data.csv      # Dataset with highly collinear features
-│   │   ├── small_test.csv          # Small dataset for validation
-│── generate_regression_data.py     # Script to generate synthetic regression data
+│── README.md                             # Project documentation
+│── requirements.txt                      # Required dependencies for the project
+│── LassoHomotopy/                        # Main project directory
+│   ├── model/                            # Contains the LASSO implementation
+│   │   ├── LassoHomotopy.py              # Homotopy-based LASSO model
+│   ├── tests/                            # Contains test scripts and datasets
+│   │   ├── test_LassoHomotopy.py         # Unit tests for the LASSO model
+│   │   ├── collinear_data.csv            # Dataset with highly collinear features
+│   │   ├── small_test.csv                # Small dataset for validation
+|   |   ├── synthetic_test_plots.ipynb    # Jupyter notebook with syntetic test plots
+│── generate_regression_data.py           # Script to generate synthetic regression data
 ```
 
 The repository is structured to ensure a clear separation between the implementation, testing, and dataset generation. The `LassoHomotopy/` directory contains the core implementation of the LASSO model, with `LassoHomotopy.py` handling the homotopy-based regression algorithm. The `tests/` folder includes unit tests and datasets to validate the model’s accuracy, sparsity, and performance on collinear data, using `test_LassoHomotopy.py` along with the datasets `collinear_data.csv` and `small_test.csv`. Additionally, `generate_regression_data.py` provides a script to create synthetic regression datasets, allowing flexibility for testing different scenarios. This structure makes it easy to navigate, extend, and validate the model while maintaining clarity between its components.
@@ -115,7 +116,7 @@ def __init__(self, lambda_init=0.1, eta=0.01, max_iter=100, tol=1e-6):
     self.theta_history = []  # Store theta updates
 ```
 
-Explanation: Sets up the initial parameters for the model. It includes:
+Sets up the initial parameters for the model. It includes:
 
 - Initial regularization value (λ).
 - Learning rate for dynamically adjusting λ.
@@ -136,8 +137,6 @@ def fit(self, X, y):
 
 ```
 
-Explanation:
-
 - Prepares the data and initializes parameters for optimization.
 - Sets $\theta$ to a zero vector, indicating that no features are active at the start.
 
@@ -156,8 +155,6 @@ for _ in range(self.max_iter):
     X_active = X[:, active_list]
 ```
 
-Explanation: 
-
 At each iteration:
 - Calculates the gradient to find the most impactful feature.
 - Adds that feature to the active set if it's not already present.
@@ -173,8 +170,6 @@ if len(active_list) > 0:
     self.theta[active_list] = theta_active
 ```
 
-Explanation:
-
 - Applies the homotopy formula to update the coefficients of the selected (active) features.
 - Uses the previous coefficients as a warm start.
 
@@ -187,8 +182,6 @@ for t in transition_points:
     if active_list[t] in self.active_set:
         self.active_set.remove(active_list[t])
 ```
-
-Explanation:
 
 - If any updated coefficient becomes smaller than the tolerance, it's removed from the active set, enforcing sparsity.
 
@@ -203,8 +196,6 @@ prediction_error = np.mean((X @ self.theta - y) ** 2)
 self.lambda_reg *= np.exp(-self.eta * prediction_error)
 ```
 
-Explanation:
-
 - Saves λ and θ values for each iteration (useful for plotting).
 - Updates λ using an exponential decay based on prediction error (dynamic regularization).
 
@@ -215,8 +206,6 @@ Explanation:
 if np.linalg.norm(gradient, ord=np.inf) < self.tol:
     break
 ```
-
-Explanation:
 
 - Stops the iteration when the largest gradient component is below the threshold (model has converged).
 
@@ -233,8 +222,6 @@ def _homotopy_update(self, X_active, y, theta_active_prev):
     return inv_X @ (X_active.T @ y - self.lambda_reg * np.sign(theta_active_prev))
 ```
 
-Explanation:
-
 - Computes a closed-form update for θ using matrix inversion.
 - If the matrix is not invertible, uses the pseudo-inverse for stability.
 
@@ -246,7 +233,6 @@ def plot_lambda_history(self): ...
 def plot_theta_history(self): ...
 ```
 
-Explanation:
 - These methods help visualize how λ and θ evolve over time.
 - Not core to the algorithm but helpful in analysis.
 
@@ -258,8 +244,6 @@ def predict(self, X):
     X = np.array(X, dtype=float)
     return X @ self.theta
 ```
-
-Explanation:
 
 - Applies the learned θ to new data for making predictions.
 
